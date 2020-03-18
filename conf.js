@@ -3,7 +3,7 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 const { Gio, GLib } = imports.gi;
 
 var Conf = class {
-    constructor(extension) {
+    constructor() {
         this.settings = Conf.getSettings();
     }
     static getSettings() {
