@@ -29,6 +29,8 @@ const Main = imports.ui.main;
 const Util = imports.misc.util;
 const Mainloop = imports.mainloop;
 
+let extension;
+
 function init() {}
 
 function enable() {
