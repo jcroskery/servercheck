@@ -1,20 +1,33 @@
+/*
+ * Copyright (c) 2020 Justus Croskery
+ * To contact me, email me at justus@olmmcc.tk.
+ *
+ * ServerCheck is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * ServerCheck is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ * for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with ServerCheck; if not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 "use strict";
 
 const { GObject, Gtk, GLib } = imports.gi;
-
-// It's common practice to keep GNOME API and JS imports in separate blocks
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Conf = Me.imports.conf.Conf;
 
-// Like `extension.js` this is used for any one-time setup like translations.
 function init() {
     log("Initializing ServerCheck Preferences");
 }
 
-
-// This function is called when the preferences window is first created to build
-// and return a Gtk widget. As an example we'll create and return a GtkLabel.
 function buildPrefsWidget() {
     const prefs = new Prefs();
     prefs.show_all();
