@@ -1,0 +1,10 @@
+{
+    "uuid": "ServerCheck@olmmcc.tk",
+    "name": "ServerCheck",
+    "description": "Checks if a server is accessible.",
+    "version": 1,
+    "shell-version": [
+        "3.36"
+    ],
+    "url": "https://olmmcc.tk"
+}
