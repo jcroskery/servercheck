@@ -8,49 +8,48 @@ const MessageTray = imports.ui.messageTray;
 const Source = MessageTray.Source;
 const Main = imports.ui.main;
 const Util = imports.misc.util;
+const Mainloop = imports.mainloop;
 
-function init() {
-    log('initializing ServerCheck');
-}
+function init() {}
 
 function enable() {
-    new Extension();
+    extension = new Extension();
 }
 
 function disable() {
-    log('disabling ServerCheck');
+    extension._destroy();
 }
 
 class Extension {
     constructor() {
-        log('enabling ServerCheck');
         this.notificationShown = false;
         this.config = new Conf();
-        this.checkMailTimeout = null;
+        this.checkServerTimer = null;
         this.startTimeout();
-        this.initialCheckMail = GLib.timeout_add_seconds(0, 5, () => {
+        this.initialCheckServer = GLib.timeout_add_seconds(0, 5, () => {
             this._checkServer();
             return false;
         });
     }
     startTimeout() {
-        this.checkMailTimeout = GLib.timeout_add_seconds(0, this.config.getTimer(), () => {
+        this.checkServerTimer = GLib.timeout_add_seconds(0, this.config.getTimer(), () => {
             this._checkServer();
             return true;
         });
     }
     _showNotification() {
         if (!this.notificationShown) {
-            let source = new Source("ServerCheck", "dialog-error");
-            Main.messageTray.add(source);
-            let notification = new MessageTray.Notification(source, "Server Error", "Failed to connect to " + this.config.getServer(), {
+            this.source = new Source("ServerCheck", "dialog-error");
+            Main.messageTray.add(this.source);
+            let notification = new MessageTray.Notification(this.source, "Server Error", "Failed to connect to " + this.config.getServer(), {
                 gicon: new Gio.ThemedIcon({ name: "dialog-error" })
             });
             notification.connect('activated', () => {
                 const defaultBrowser = Gio.app_info_get_default_for_uri_scheme("http").get_executable();
                 Util.trySpawnCommandLine(defaultBrowser + " " + this.config.getServer());
             });
-            source.showNotification(notification);
+            notification.setResident(true);
+            this.source.showNotification(notification);
             this.notificationShown = true;
         }
     }
@@ -66,5 +65,10 @@ class Extension {
                 this.notificationShown = false;
             }
         });
+    }
+    _destroy() {
+        Mainloop.source_remove(this.checkServerTimer);
+        Mainloop.source_remove(this.initialCheckServer);
+        this.source.destroy();
     }
 }
