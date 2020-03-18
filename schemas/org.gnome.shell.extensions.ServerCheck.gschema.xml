@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.ServerCheck" path="/org/gnome/shell/extensions/ServerCheck/">
+    <key name="timer" type="i">
+      <default>60</default>
+    </key>
+    <key name="server" type="s">
+      <default>"https://www.olmmcc.tk/"</default>
+    </key>
+  </schema>
+</schemalist>

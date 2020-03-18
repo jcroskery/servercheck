@@ -5,7 +5,7 @@ const { GObject, Gtk, GLib } = imports.gi;
 // It's common practice to keep GNOME API and JS imports in separate blocks
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
-
+const Conf = Me.imports.conf.Conf;
 
 // Like `extension.js` this is used for any one-time setup like translations.
 function init() {
@@ -27,8 +27,9 @@ var Prefs = GObject.registerClass(class extends Gtk.Box {
         this.margin = 24;
         this.orientation = Gtk.Orientation.VERTICAL;
 
-        let server = "https://www.olmmcc.tk";
-        let timer = 60;
+        this._conf = new Conf();
+        let server = this._conf.getServer();
+        let timer = this._conf.getTimer();
 
         const hbox1 = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL });
         const setting1_label = this._addLabel(hbox1, "Check every " + timer + " seconds: ");
@@ -46,7 +47,7 @@ var Prefs = GObject.registerClass(class extends Gtk.Box {
         setting_slider.connect('value-changed', button => {
             let i = Math.round(button.get_value()).toString();
             setting1_label.label = "Check every " + i + " seconds: ";
-            //Set new timer
+            this._conf.setTimer(i);
         });
         hbox1.pack_end(setting_slider, true, true, 0);
         this.add(hbox1);
@@ -59,7 +60,7 @@ var Prefs = GObject.registerClass(class extends Gtk.Box {
         button.connect('clicked', () => {
             let new_server = url.get_buffer().get_text();
             setting2_label.label = "Server url: " + new_server;
-            //Set new server
+            this._conf.setServer(new_server);
         });
         hbox2.pack_end(url, true, true, 0);
         this.add(hbox2)
