@@ -31,13 +31,17 @@ const Mainloop = imports.mainloop;
 
 let extension;
 
-function init() {}
+function init() {
+    log("Initializing ServerCheck.");
+}
 
 function enable() {
+    log("Enabling ServerCheck");
     extension = new Extension();
 }
 
 function disable() {
+    log("Disabling ServerCheck.");
     extension._destroy();
 }
 
@@ -46,6 +50,7 @@ class Extension {
         this.notificationShown = false;
         this.config = new Conf();
         this.checkServerTimer = null;
+        this.source = null;
         this.startTimeout();
         this.initialCheckServer = GLib.timeout_add_seconds(0, 5, () => {
             this._checkServer();
