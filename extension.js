@@ -52,7 +52,7 @@ class Extension {
         this.checkServerTimer = null;
         this.source = null;
         this.startTimeout();
-        this.initialCheckServer = GLib.timeout_add_seconds(0, 5, () => {
+        this.initialCheckServer = GLib.timeout_add_seconds(0, 15, () => {
             this._checkServer();
             return false;
         });
@@ -95,6 +95,8 @@ class Extension {
     _destroy() {
         Mainloop.source_remove(this.checkServerTimer);
         Mainloop.source_remove(this.initialCheckServer);
-        this.source.destroy();
+        if (this.source !== null) {
+            this.source.destroy();
+        }
     }
 }
